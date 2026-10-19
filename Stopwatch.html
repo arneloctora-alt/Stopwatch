@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplikasi Stopwatch</title>
+</head>
+<body>
+
+    <h1>Aplikasi Stopwatch</h1>
+
+    <h2 id="waktu">00:00:00.00</h2>
+
+    <button onclick="mulai()">Start</button>
+    <button onclick="berhenti()">Stop</button>
+    <button onclick="reset()">Reset</button>
+
+    <script>
+        let waktuMulai = 0;
+        let waktuBerlalu = 0;
+        let interval = null;
+
+        function tampilkanWaktu() {
+            let totalWaktu = waktuBerlalu;
+
+            if (interval !== null) {
+                totalWaktu += Date.now() - waktuMulai;
+            }
+
+            let jam = Math.floor(totalWaktu / 3600000);
+            let menit = Math.floor((totalWaktu % 3600000) / 60000);
+            let detik = Math.floor((totalWaktu % 60000) / 1000);
+            let milidetik = Math.floor((totalWaktu % 1000) / 10);
+
+            document.getElementById("waktu").textContent =
+                String(jam).padStart(2, "0") + ":" +
+                String(menit).padStart(2, "0") + ":" +
+                String(detik).padStart(2, "0") + "." +
+                String(milidetik).padStart(2, "0");
+        }
+
+        function mulai() {
+            if (interval !== null) {
+                return;
+            }
+
+            waktuMulai = Date.now();
+
+            interval = setInterval(tampilkanWaktu, 10);
+        }
+
+        function berhenti() {
+            if (interval === null) {
+                return;
+            }
+
+            waktuBerlalu += Date.now() - waktuMulai;
+
+            clearInterval(interval);
+            interval = null;
+
+            tampilkanWaktu();
+        }
+
+        function reset() {
+            clearInterval(interval);
+            interval = null;
+
+            waktuMulai = 0;
+            waktuBerlalu = 0;
+
+            tampilkanWaktu();
+        }
+    </script>
+
+</body>
+</html>
